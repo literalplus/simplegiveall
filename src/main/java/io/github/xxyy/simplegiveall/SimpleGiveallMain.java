@@ -36,6 +36,11 @@ public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
     @Override
     public final void onLoad() {
         this.getCommand("giveall").setExecutor(this);
+
+        System.out.println("Simple Giveall for Bukkit  Copyright (C) 2013 xxyy98@gmail.com | Philipp Nowak\n"
+                + "This program comes with ABSOLUTELY NO WARRANTY; for details visit http://www.gnu.org/licenses/.\n"
+                + "This is free software, and you are welcome to redistribute it\n"
+                + "under certain conditions; visit http://www.gnu.org/licenses/ for details.");
     }
 
     @Override
