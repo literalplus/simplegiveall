@@ -16,6 +16,8 @@
  */
 package io.github.xxyy.simplegiveall;
 
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -27,15 +29,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+//Let's do it, shall we?
 /**
  *
  * @author xxyy98 < xxyy98@gmail.com >
  */
 public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
 
+    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("io/github/xxyy/simplegiveall/simplegiveall");
+
     @Override
     public final void onLoad() {
-        this.getCommand("giveall").setExecutor(this);
+        this.getCommand(BUNDLE.getString("GIVEALL")).setExecutor(this);
 
         System.out.println("Simple Giveall for Bukkit  Copyright (C) 2013 xxyy98@gmail.com | Philipp Nowak\n"
                 + "This program comes with ABSOLUTELY NO WARRANTY; for details visit http://www.gnu.org/licenses/.\n"
@@ -43,79 +48,97 @@ public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
                 + "under certain conditions; visit http://www.gnu.org/licenses/ for details.");
     }
 
+    private static ItemStack handleGiveallHand(final CommandSender sender, final String[] args) {
+        ItemStack finalStack;
+        if (sender instanceof ConsoleCommandSender) {
+            sender.sendMessage(BUNDLE.getString("ERR_NO_PLAYER"));
+            return null;
+        }
+        final Player plr = (Player) sender;
+        finalStack = plr.getItemInHand().clone(); //Without clone(), there are some weeeird bugs
+        if (finalStack == null || finalStack.getType().equals(Material.AIR) || finalStack.getAmount() == 0) {
+            plr.sendMessage(BUNDLE.getString("ERR_NOTHING_IN_HAND"));
+            return null;
+        }
+        if (args.length >= 2 && StringUtils.isNumeric(args[1])) {
+            finalStack.setAmount(Integer.parseInt(args[1]));
+        }
+        return finalStack;
+    }
+
+    @SuppressWarnings("deprecation") //I know it's bad, but users will want it (ItemStack w/ id)
+    private static ItemStack handleGiveallSpecific(final CommandSender sender, final String[] args) {
+        ItemStack finalStack;
+        if (args.length >= 2) {
+            final String[] itemInfo = args[0].split(BUNDLE.getString("MATERIAL_DAMAGE_SEPERATOR"));
+            short damage = 0;
+            if (!StringUtils.isNumeric(args[1])) {
+                sender.sendMessage(MessageFormat.format(BUNDLE.getString("AMOUNT_NAN"), new Object[] {args[1]}));
+                return null;
+            }
+            if (itemInfo.length > 1) {
+                if (StringUtils.isNumeric(itemInfo[1])) {
+                    damage = Short.parseShort(itemInfo[1]);
+                } else {
+                    sender.sendMessage(MessageFormat.format(BUNDLE.getString("INVALID_DAMAGE"), new Object[] {itemInfo[1]}));
+                    return null;
+                }
+            }
+            if (StringUtils.isNumeric(itemInfo[0])) {
+                finalStack = new ItemStack(Integer.parseInt(itemInfo[0]), Integer.parseInt(args[1]), damage); //Should we just print the message and then leave? ->usability
+                sender.sendMessage(MessageFormat.format(BUNDLE.getString("ITEMIDS_DEPRECATED"), finalStack.getType()));
+            } else {
+                final Material material = Material.matchMaterial(itemInfo[0].replace("-", "_"));
+                if (material == null) {
+                    sender.sendMessage(MessageFormat.format(BUNDLE.getString("UNKNOWN_MATERIAL"), new Object[] {itemInfo[0].toUpperCase()}));
+                    return null;
+                }
+                finalStack = new ItemStack(material, Integer.parseInt(args[1]), damage);
+            }
+        } else {
+            SimpleGiveallMain.printHelpTo(sender);
+            return null;
+        }
+        return finalStack;
+    }
+
     @Override
     public final boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
         ItemStack finalStack;
         if (args.length >= 1) {
             if (args[0].equalsIgnoreCase("hand")) {
-                if (sender instanceof ConsoleCommandSender) {
-                    sender.sendMessage("§cDas kannst du nur als Spieler ausführen. Hättest du etwas anderes erwartet?");
+                finalStack = handleGiveallHand(sender, args);
+                if (finalStack == null) {
                     return true;
                 }
-                final Player plr = (Player) sender;
-                finalStack = plr.getItemInHand().clone(); //Without clone(), there are some weeeird bugs
-                if (finalStack == null || finalStack.getType().equals(Material.AIR) || finalStack.getAmount() == 0) {
-                    plr.sendMessage("§cDu hast nichts in der Hand!");
-                    return true;
-                }
-                if (args.length >= 2 && StringUtils.isNumeric(args[1])) {
-                    finalStack.setAmount(Integer.parseInt(args[1]));
-                }
-            } //argument 0 is not "hand"
-            else if (args[0].equalsIgnoreCase("help")) {
-                return SimpleGiveallMain.printHelpTo(sender);
-            } //argument 0 is not "help"
-            else {
-                if (args.length >= 2) {
-                    String[] itemInfo = args[0].split(":");
-                    short damage = 0;
-                    if (!StringUtils.isNumeric(args[1])) {
-                        sender.sendMessage("§cDie An§lzahl§c ist keine Zahl: §4" + args[1]);
+            } else {  //argument 0 is not "hand"
+                if (args[0].equalsIgnoreCase("help")) {
+                    return SimpleGiveallMain.printHelpTo(sender);
+                } else { //argument 0 is not "help"
+                    finalStack = SimpleGiveallMain.handleGiveallSpecific(sender, args);
+                    if (finalStack == null) {
                         return true;
                     }
-                    if (itemInfo.length > 1) {
-                        if (StringUtils.isNumeric(itemInfo[1])) {
-                            damage = Short.parseShort(itemInfo[1]);
-                        }
-                        else {
-                            sender.sendMessage("§cInvalide Damagevalue/Invalide Metadata: " + itemInfo[1]);
-                            return true;
-                        }
-                    }
-                    if (StringUtils.isNumeric(itemInfo[0])) {
-                        finalStack = new ItemStack(Integer.parseInt(itemInfo[0]), Integer.parseInt(args[1]), damage); //I KNOW it's deprecated but users would want this
-                    }
-                    else {
-                        final Material material = Material.matchMaterial(itemInfo[0].replace("-", "_"));
-                        if (material == null) {
-                            sender.sendMessage("§cDieses Material ist unbekannt: §4" + itemInfo[0].toUpperCase());
-                            return true;
-                        }
-                        finalStack = new ItemStack(material, Integer.parseInt(args[1]), damage);
-                    }
                 }
-                else {
-                    return SimpleGiveallMain.printHelpTo(sender);
-                }
-            }
+            } // not hand
 
-            //Let's do it, shall we?
+            //Do it!
+            final String publicMessage = MessageFormat.format(BUNDLE.getString("PUBLIC_MESSAGE"), new Object[] {SimpleGiveallMain.getISString(finalStack)}); //save some method calls
+            final String adminMessage = MessageFormat.format(BUNDLE.getString("ADMIN_MESSAGE"), new Object[] {SimpleGiveallMain.getISString(finalStack), sender.getName()});
 
-            final String publicMessage = "§3Alle Spieler haben §6" + SimpleGiveallMain.getISString(finalStack) + " §3erhalten."; //save some method calls
-            final String adminMessage = "§3Alle Spieler haben §6" + SimpleGiveallMain.getISString(finalStack) + " §3erhalten. §7§o(von " + sender.getName() + ")";
             for (Player target : Bukkit.getOnlinePlayers()) {
                 target.getInventory().addItem(finalStack);
 
                 if (target.hasPermission(command.getPermission())) { //message contains sender name
                     target.sendMessage(adminMessage);
-                }
-                else {
+                } else {
                     target.sendMessage(publicMessage);
                 }
             }
+
             Bukkit.getConsoleSender().sendMessage(adminMessage); //logging and stuff
-        }
-        else {
+
+        } else {
             SimpleGiveallMain.printHelpTo(sender);
         }
         return true;
@@ -138,8 +161,8 @@ public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
      * @return Always true, for directly returing in COmmandExecutors.
      */
     private static boolean printHelpTo(final CommandSender sender) {
-        sender.sendMessage(new String[] {"§e/giveall hand <Anzahl>\n§e/giveall [ITEM_NAME]:<Damage> [Anzahl]",
-                                         "§e/giveall [Item-ID]:<Damage>"});
+        sender.sendMessage(new String[] {BUNDLE.getString("HELP_LINE_1"),
+                                         BUNDLE.getString("HELP_LINE_2")});
         return true;
     }
 }
