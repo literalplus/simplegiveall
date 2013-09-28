@@ -1,0 +1,12 @@
+name: SimpleGiveall
+version: "${project.version}"
+description: "It's a giveall command. And it's very simple."
+author: xxyy98<xxyy98[at]gmail.com> | Philipp Nowak
+main: io.github.xxyy.simplegiveall.SimpleGiveallMain
+
+commands:
+  giveall:
+    description: Well, it adds some item to the inventories of all online players.
+    permission: xy.giveall.use
+    usage: "/<command> [hand|ITEM_NAME|item_id] [amount]"
+    aliases: [ga, xyga]
