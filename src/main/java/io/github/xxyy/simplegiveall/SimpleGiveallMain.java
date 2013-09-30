@@ -17,6 +17,7 @@
 package io.github.xxyy.simplegiveall;
 
 import java.text.MessageFormat;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -36,28 +37,44 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
 
-    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("io/github/xxyy/simplegiveall/simplegiveall");
+    private static ResourceBundle bundle = null;
+    private static final String LICENSE_HEADER = "Simple Giveall for Bukkit  Copyright (C) 2013 xxyy98@gmail.com | Philipp Nowak\n"
+            + "This program comes with ABSOLUTELY NO WARRANTY; for details visit http://www.gnu.org/licenses/.\n"
+            + "This is free software, and you are welcome to redistribute it\n"
+            + "under certain conditions; visit http://www.gnu.org/licenses/ for details.";
 
     @Override
     public final void onLoad() {
-        this.getCommand(BUNDLE.getString("GIVEALL")).setExecutor(this);
 
-        System.out.println("Simple Giveall for Bukkit  Copyright (C) 2013 xxyy98@gmail.com | Philipp Nowak\n"
-                + "This program comes with ABSOLUTELY NO WARRANTY; for details visit http://www.gnu.org/licenses/.\n"
-                + "This is free software, and you are welcome to redistribute it\n"
-                + "under certain conditions; visit http://www.gnu.org/licenses/ for details.");
+        initialiseConfig();
+
+        Locale locale = Locale.forLanguageTag(this.getConfig().getString("locale"));
+
+        if (bundle == null) {
+            bundle = ResourceBundle.getBundle("io/github/xxyy/simplegiveall/simplegiveall", locale);
+        }
+        this.getCommand(bundle.getString("GIVEALL")).setExecutor(this);
+
+        System.out.println(LICENSE_HEADER);
+    }
+
+    private void initialiseConfig() {
+        this.getConfig().options().copyDefaults(true);
+        this.getConfig().options().copyHeader(true);
+        this.getConfig().options().header(LICENSE_HEADER + "\nLocale format: http://docs.oracle.com/javase/7/docs/api/java/util/Locale.html#forLanguageTag%28java.lang.String%29");
+        this.getConfig().addDefault("locale", Locale.ENGLISH.toLanguageTag());
     }
 
     private static ItemStack handleGiveallHand(final CommandSender sender, final String[] args) {
         ItemStack finalStack;
         if (sender instanceof ConsoleCommandSender) {
-            sender.sendMessage(BUNDLE.getString("ERR_NO_PLAYER"));
+            sender.sendMessage(bundle.getString("ERR_NO_PLAYER"));
             return null;
         }
         final Player plr = (Player) sender;
         finalStack = plr.getItemInHand().clone(); //Without clone(), there are some weeeird bugs
         if (finalStack == null || finalStack.getType().equals(Material.AIR) || finalStack.getAmount() == 0) {
-            plr.sendMessage(BUNDLE.getString("ERR_NOTHING_IN_HAND"));
+            plr.sendMessage(bundle.getString("ERR_NOTHING_IN_HAND"));
             return null;
         }
         if (args.length >= 2 && StringUtils.isNumeric(args[1])) {
@@ -70,27 +87,27 @@ public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
     private static ItemStack handleGiveallSpecific(final CommandSender sender, final String[] args) {
         ItemStack finalStack;
         if (args.length >= 2) {
-            final String[] itemInfo = args[0].split(BUNDLE.getString("MATERIAL_DAMAGE_SEPERATOR"));
+            final String[] itemInfo = args[0].split(bundle.getString("MATERIAL_DAMAGE_SEPERATOR"));
             short damage = 0;
             if (!StringUtils.isNumeric(args[1])) {
-                sender.sendMessage(MessageFormat.format(BUNDLE.getString("AMOUNT_NAN"), new Object[] {args[1]}));
+                sender.sendMessage(MessageFormat.format(bundle.getString("AMOUNT_NAN"), new Object[] {args[1]}));
                 return null;
             }
             if (itemInfo.length > 1) {
                 if (StringUtils.isNumeric(itemInfo[1])) {
                     damage = Short.parseShort(itemInfo[1]);
                 } else {
-                    sender.sendMessage(MessageFormat.format(BUNDLE.getString("INVALID_DAMAGE"), new Object[] {itemInfo[1]}));
+                    sender.sendMessage(MessageFormat.format(bundle.getString("INVALID_DAMAGE"), new Object[] {itemInfo[1]}));
                     return null;
                 }
             }
             if (StringUtils.isNumeric(itemInfo[0])) {
                 finalStack = new ItemStack(Integer.parseInt(itemInfo[0]), Integer.parseInt(args[1]), damage); //Should we just print the message and then leave? ->usability
-                sender.sendMessage(MessageFormat.format(BUNDLE.getString("ITEMIDS_DEPRECATED"), finalStack.getType()));
+                sender.sendMessage(MessageFormat.format(bundle.getString("ITEMIDS_DEPRECATED"), finalStack.getType()));
             } else {
                 final Material material = Material.matchMaterial(itemInfo[0].replace("-", "_"));
                 if (material == null) {
-                    sender.sendMessage(MessageFormat.format(BUNDLE.getString("UNKNOWN_MATERIAL"), new Object[] {itemInfo[0].toUpperCase()}));
+                    sender.sendMessage(MessageFormat.format(bundle.getString("UNKNOWN_MATERIAL"), new Object[] {itemInfo[0].toUpperCase()}));
                     return null;
                 }
                 finalStack = new ItemStack(material, Integer.parseInt(args[1]), damage);
@@ -123,8 +140,8 @@ public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
             } // not hand
 
             //Do it!
-            final String publicMessage = MessageFormat.format(BUNDLE.getString("PUBLIC_MESSAGE"), new Object[] {SimpleGiveallMain.getISString(finalStack)}); //save some method calls
-            final String adminMessage = MessageFormat.format(BUNDLE.getString("ADMIN_MESSAGE"), new Object[] {SimpleGiveallMain.getISString(finalStack), sender.getName()});
+            final String publicMessage = MessageFormat.format(bundle.getString("PUBLIC_MESSAGE"), new Object[] {SimpleGiveallMain.getISString(finalStack)}); //save some method calls
+            final String adminMessage = MessageFormat.format(bundle.getString("ADMIN_MESSAGE"), new Object[] {SimpleGiveallMain.getISString(finalStack), sender.getName()});
 
             for (Player target : Bukkit.getOnlinePlayers()) {
                 target.getInventory().addItem(finalStack);
@@ -161,8 +178,8 @@ public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
      * @return Always true, for directly returing in COmmandExecutors.
      */
     private static boolean printHelpTo(final CommandSender sender) {
-        sender.sendMessage(new String[] {BUNDLE.getString("HELP_LINE_1"),
-                                         BUNDLE.getString("HELP_LINE_2")});
+        sender.sendMessage(new String[] {bundle.getString("HELP_LINE_1"),
+                                         bundle.getString("HELP_LINE_2")});
         return true;
     }
 }
