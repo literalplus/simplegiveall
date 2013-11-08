@@ -44,7 +44,7 @@ public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
             + "under certain conditions; visit http://www.gnu.org/licenses/ for details.";
 
     @Override
-    public final void onLoad() {
+    public final void onEnable() {
 
         initialiseConfig();
 

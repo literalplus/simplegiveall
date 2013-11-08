@@ -21,12 +21,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <groupId>io.github.xxyy</groupId>
     <artifactId>simplegiveall</artifactId>
-    <version>1.0</version>
+    <version>1.1.2</version>
     <packaging>jar</packaging>
 
     <name>simplegiveall</name>
     <url>http://maven.apache.org</url>
-
+    <ciManagement>
+        <system>hudson</system>
+        <url>http://ci.nowak-at.net/job/Simple%20Giveall/</url>
+    </ciManagement>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -89,6 +92,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <phase>package</phase>
                         <goals>
                             <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.5</version>
+                <executions>
+                    <execution>
+                        <id>default-resources</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>resources</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-testResources</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>testResources</goal>
                         </goals>
                     </execution>
                 </executions>
