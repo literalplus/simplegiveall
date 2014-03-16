@@ -24,6 +24,7 @@ If you have some enhancements, feel free to submit a pull request.<br>
 Building
 ---------
 For Building, use Apache Maven.<br>
+If you want a pre-built copy, visit my [CI Server](http://server.nowak-at.net/jenkins/job/public~Simple%20Giveall/).
 
 License
 --------
