@@ -19,7 +19,7 @@ Well, this one is quite simple, too.
 
 Contributing
 -------------
-If you have some enhancements, feel free to submit a pull request.<br>
+If you have enhancements, pull requests are always appreciated! :)
 
 Building
 ---------
@@ -31,7 +31,7 @@ If you want a pre-built copy, visit my [CI Server](http://server.nowak-at.net/je
 
 Help
 ------
-If you wish to reseive support for this plugin or just want to talk, you can try [joining my IRC channel](http://irc.spi.gt/iris/?channels=lit)
+If you wish to receive support for this plugin or just want to talk, you can try [joining my IRC channel](http://irc.spi.gt/iris/?channels=lit)
 
 License
 --------
