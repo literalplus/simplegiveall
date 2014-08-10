@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2013 xxyy98 < xxyy98@gmail.com > (Philipp Nowak)
+ * Copyright (C) 2013 - 2014 xxyy98 <devnull@nowak-at.net> (Philipp Nowak)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,9 +16,6 @@
  */
 package io.github.xxyy.simplegiveall;
 
-import java.text.MessageFormat;
-import java.util.Locale;
-import java.util.ResourceBundle;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -30,22 +27,25 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-//Let's do it, shall we?
+import java.text.MessageFormat;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 /**
+ * Main class for SimpleGiveall, managing configuration, Bukkit API interfacing as well as commands.
  *
- * @author xxyy98 < xxyy98@gmail.com >
+ * @author <a href="http://xxyy.github.io/">xxyy</a>
  */
 public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
 
     private static ResourceBundle bundle = null;
-    private static final String LICENSE_HEADER = "Simple Giveall for Bukkit  Copyright (C) 2013 xxyy98@gmail.com | Philipp Nowak\n"
+    private static final String LICENSE_HEADER = "Simple Giveall for Bukkit  Copyright (C) 2013 - 2014 xxyy98@gmail.com | Philipp Nowak\n"
             + "This program comes with ABSOLUTELY NO WARRANTY; for details visit http://www.gnu.org/licenses/.\n"
             + "This is free software, and you are welcome to redistribute it\n"
             + "under certain conditions; visit http://www.gnu.org/licenses/ for details.";
 
     @Override
     public final void onEnable() {
-
         initialiseConfig();
 
         Locale locale = Locale.forLanguageTag(this.getConfig().getString("locale"));
@@ -83,21 +83,21 @@ public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
         return finalStack;
     }
 
-    @SuppressWarnings("deprecation") //I know it's bad, but users will want it (ItemStack w/ id)
+    @SuppressWarnings("deprecation") //ItemStack IDs
     private static ItemStack handleGiveallSpecific(final CommandSender sender, final String[] args) {
         ItemStack finalStack;
         if (args.length >= 2) {
             final String[] itemInfo = args[0].split(bundle.getString("MATERIAL_DAMAGE_SEPERATOR"));
             short damage = 0;
             if (!StringUtils.isNumeric(args[1])) {
-                sender.sendMessage(MessageFormat.format(bundle.getString("AMOUNT_NAN"), new Object[] {args[1]}));
+                sender.sendMessage(MessageFormat.format(bundle.getString("AMOUNT_NAN"), new Object[]{args[1]}));
                 return null;
             }
             if (itemInfo.length > 1) {
                 if (StringUtils.isNumeric(itemInfo[1])) {
                     damage = Short.parseShort(itemInfo[1]);
                 } else {
-                    sender.sendMessage(MessageFormat.format(bundle.getString("INVALID_DAMAGE"), new Object[] {itemInfo[1]}));
+                    sender.sendMessage(MessageFormat.format(bundle.getString("INVALID_DAMAGE"), new Object[]{itemInfo[1]}));
                     return null;
                 }
             }
@@ -107,7 +107,7 @@ public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
             } else {
                 final Material material = Material.matchMaterial(itemInfo[0].replace("-", "_"));
                 if (material == null) {
-                    sender.sendMessage(MessageFormat.format(bundle.getString("UNKNOWN_MATERIAL"), new Object[] {itemInfo[0].toUpperCase()}));
+                    sender.sendMessage(MessageFormat.format(bundle.getString("UNKNOWN_MATERIAL"), new Object[]{itemInfo[0].toUpperCase()}));
                     return null;
                 }
                 finalStack = new ItemStack(material, Integer.parseInt(args[1]), damage);
@@ -140,8 +140,8 @@ public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
             } // not hand
 
             //Do it!
-            final String publicMessage = MessageFormat.format(bundle.getString("PUBLIC_MESSAGE"), new Object[] {SimpleGiveallMain.getISString(finalStack)}); //save some method calls
-            final String adminMessage = MessageFormat.format(bundle.getString("ADMIN_MESSAGE"), new Object[] {SimpleGiveallMain.getISString(finalStack), sender.getName()});
+            final String publicMessage = MessageFormat.format(bundle.getString("PUBLIC_MESSAGE"), new Object[]{SimpleGiveallMain.getISString(finalStack)}); //save some method calls
+            final String adminMessage = MessageFormat.format(bundle.getString("ADMIN_MESSAGE"), new Object[]{SimpleGiveallMain.getISString(finalStack), sender.getName()});
 
             for (Player target : Bukkit.getOnlinePlayers()) {
                 target.getInventory().addItem(finalStack);
@@ -162,9 +162,10 @@ public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
     }
 
     /**
-     * @param stack ItemStack to stringify
+     * Creates a short and human-readable String representation of a given ItemStack.
      *
-     * @return A short String representation of stack in the form of MATERIAL * amount
+     * @param stack ItemStack to process
+     * @return A short and human-readable String representing the passed ItemStack.
      */
     private static String getISString(final ItemStack stack) {
         return stack.getType().toString() + " * " + stack.getAmount();
@@ -173,13 +174,12 @@ public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
     /**
      * Common method to print "giveall" command help to a CommandSender.
      *
-     * @param sender Who needs help?
-     *
-     * @return Always true, for directly returing in COmmandExecutors.
+     * @param sender recipient of help message
+     * @return true, always.
      */
     private static boolean printHelpTo(final CommandSender sender) {
-        sender.sendMessage(new String[] {bundle.getString("HELP_LINE_1"),
-                                         bundle.getString("HELP_LINE_2")});
+        sender.sendMessage(new String[]{bundle.getString("HELP_LINE_1"),
+                bundle.getString("HELP_LINE_2")});
         return true;
     }
 }
