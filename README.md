@@ -1,4 +1,4 @@
-Simple Giveall
+Simple Giveall [![Build Status](http://ci.nowak-at.net/job/public~Simple%20Giveall/badge/icon)](http://ci.nowak-at.net/job/public~Simple%20Giveall/)
 =============
 
 A very simple Bukkit plugin that gives all online players one or more item(s).
