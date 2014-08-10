@@ -14,7 +14,7 @@ __/giveall__: _Gives all online players a specified item stack._<br>
 
 Permissions
 ------------
-Well, this one is quite simple, too.<br>
+Well, this one is quite simple, too.
 *xy.giveall.use*: Allows to use /giveall and also see who executed it instead of just what has been given.<br>
 
 Contributing
@@ -23,8 +23,15 @@ If you have some enhancements, feel free to submit a pull request.<br>
 
 Building
 ---------
-For Building, use Apache Maven.<br>
-If you want a pre-built copy, visit my [CI Server](http://server.nowak-at.net/jenkins/job/public~Simple%20Giveall/).
+For Building, use Apache Maven:
+````
+mvn clean package
+````
+If you want a pre-built copy, visit my [CI Server](http://server.nowak-at.net/jenkins/job/public~Simple%20Giveall/) or the GitHub releases.
+
+Help
+------
+If you wish to reseive support for this plugin or just want to talk, you can try [joining my IRC channel](http://irc.spi.gt/iris/?channels=lit)
 
 License
 --------
