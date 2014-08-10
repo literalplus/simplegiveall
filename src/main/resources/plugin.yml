@@ -1,5 +1,5 @@
 name: SimpleGiveall
-version: 1.1.2
+version: ${project.version}
 description: "It's a giveall command. And it's very simple."
 author: xxyy
 main: io.github.xxyy.simplegiveall.SimpleGiveallMain
