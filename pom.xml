@@ -75,7 +75,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </plugin>
         </plugins>
 
-        <finalName>SimpleGiveall_${project.version}</finalName>
+        <finalName>SimpleGiveall-${project.version}</finalName>
 
         <resources>
             <resource>
