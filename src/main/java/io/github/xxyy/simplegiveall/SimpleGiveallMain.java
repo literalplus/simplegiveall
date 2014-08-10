@@ -182,8 +182,7 @@ public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
      * @return true, always.
      */
     private static boolean printHelpTo(final CommandSender sender) {
-        sender.sendMessage(new String[]{bundle.getString("HELP_LINE_1"),
-                bundle.getString("HELP_LINE_2")});
+        sender.sendMessage(bundle.getString("GIVEALL_HELP").split("\\\\n")); //We'll get a literal "\n" - Four slashes: two are Java escapes, one is a regex escape
         return true;
     }
 }
