@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <groupId>io.github.xxyy</groupId>
     <artifactId>simplegiveall</artifactId>
-    <version>1.1.3-SNAPSHOT</version>
+    <version>1.1.3</version>
     <packaging>jar</packaging>
 
     <name>Simple Giveall for Spigot</name>
