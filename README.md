@@ -28,7 +28,7 @@ If you want a pre-built copy, visit my [CI Server](http://server.nowak-at.net/je
 
 License
 --------
-    Simple Giveall for Bukkit  Copyright (C) 2013 xxyy98@gmail.com | Philipp Nowak
+    Simple Giveall for Bukkit  Copyright (C) 2013 - 2014 xxyy98@gmail.com | Philipp Nowak
     This program comes with ABSOLUTELY NO WARRANTY; for details visit http://www.gnu.org/licenses/.
     This is free software, and you are welcome to redistribute it
     under certain conditions; visit http://www.gnu.org/licenses/ for details.
