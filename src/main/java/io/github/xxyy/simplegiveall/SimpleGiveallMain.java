@@ -119,6 +119,7 @@ public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
             final Material material = Material.matchMaterial(itemInfo[0].replace("-", "_")); //replace dashes with underscores because that's a common mistake
             if (material == null) { //If the user passed an invalid material name
                 sender.sendMessage(MessageFormat.format(bundle.getString("UNKNOWN_MATERIAL"), itemInfo[0].toUpperCase()));
+                printHelpTo(sender);
                 return null;
             }
             finalStack = new ItemStack(material, amount, damage);
