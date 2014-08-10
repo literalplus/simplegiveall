@@ -140,8 +140,8 @@ public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
             } // not hand
 
             //Do it!
-            final String publicMessage = MessageFormat.format(bundle.getString("PUBLIC_MESSAGE"), new Object[]{SimpleGiveallMain.getISString(finalStack)}); //save some method calls
-            final String adminMessage = MessageFormat.format(bundle.getString("ADMIN_MESSAGE"), new Object[]{SimpleGiveallMain.getISString(finalStack), sender.getName()});
+            final String publicMessage = MessageFormat.format(bundle.getString("PUBLIC_MESSAGE"), SimpleGiveallMain.getISString(finalStack)); //save some method calls
+            final String adminMessage = MessageFormat.format(bundle.getString("ADMIN_MESSAGE"), SimpleGiveallMain.getISString(finalStack), sender.getName());
 
             for (Player target : Bukkit.getOnlinePlayers()) {
                 target.getInventory().addItem(finalStack);
