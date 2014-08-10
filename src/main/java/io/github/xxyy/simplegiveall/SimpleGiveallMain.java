@@ -152,7 +152,7 @@ public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
         String adminMessage = MessageFormat.format(bundle.getString("ADMIN_MESSAGE"), stackString, sender.getName());
 
         for (Player target : Bukkit.getOnlinePlayers()) {
-            target.getInventory().addItem(finalStack);
+            target.getInventory().addItem(finalStack.clone());
 
             if (target.hasPermission(command.getPermission())) { //message contains sender name
                 target.sendMessage(adminMessage);
