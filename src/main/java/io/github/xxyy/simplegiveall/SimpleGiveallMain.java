@@ -89,19 +89,19 @@ public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
     @SuppressWarnings("deprecation") //ItemStack IDs
     private static ItemStack handleGiveallSpecific(final CommandSender sender, final String[] args) { //giveall item[:damage] amount
         ItemStack finalStack;
+        int amount = 1;
+        short damage = 0;
 
-        if (args.length < 2) {
-            SimpleGiveallMain.printHelpTo(sender);
-            return null;
+        if (args.length >= 2) {
+            if (!StringUtils.isNumeric(args[1])) {
+                sender.sendMessage(MessageFormat.format(bundle.getString("AMOUNT_NAN"), args[1]));
+                return null;
+            }
+
+            amount = Integer.parseInt(args[1]);
         }
 
         final String[] itemInfo = args[0].split(bundle.getString("MATERIAL_DAMAGE_SEPERATOR")); //default is ':'
-        short damage = 0;
-
-        if (!StringUtils.isNumeric(args[1])) {
-            sender.sendMessage(MessageFormat.format(bundle.getString("AMOUNT_NAN"), args[1]));
-            return null;
-        }
 
         if (itemInfo.length > 1) { //If we have a damage given, use that
             if (StringUtils.isNumeric(itemInfo[1])) { //Check that the damage is actually numeric
@@ -113,7 +113,7 @@ public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
         }
 
         if (StringUtils.isNumeric(itemInfo[0])) { //Check if we have been passed an item ID
-            finalStack = new ItemStack(Integer.parseInt(itemInfo[0]), Integer.parseInt(args[1]), damage);
+            finalStack = new ItemStack(Integer.parseInt(itemInfo[0]), amount, damage);
             sender.sendMessage(MessageFormat.format(bundle.getString("ITEMIDS_DEPRECATED"), finalStack.getType())); //Send the user a message noting that item IDs will be removed in a future update
         } else { //Else, we probably have a material name
             final Material material = Material.matchMaterial(itemInfo[0].replace("-", "_")); //replace dashes with underscores because that's a common mistake
@@ -121,7 +121,7 @@ public class SimpleGiveallMain extends JavaPlugin implements CommandExecutor {
                 sender.sendMessage(MessageFormat.format(bundle.getString("UNKNOWN_MATERIAL"), itemInfo[0].toUpperCase()));
                 return null;
             }
-            finalStack = new ItemStack(material, Integer.parseInt(args[1]), damage);
+            finalStack = new ItemStack(material, amount, damage);
         }
 
         return finalStack;
