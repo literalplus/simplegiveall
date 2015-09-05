@@ -1,4 +1,4 @@
-Simple Giveall [![Build Status](http://ci.nowak-at.net/job/public~Simple%20Giveall/badge/icon)](http://ci.nowak-at.net/job/public~Simple%20Giveall/)
+Simple Giveall [![Build Status](https://ci.nowak-at.net/buildStatus/icon?job=public~SimpleGiveall) ](https://ci.nowak-at.net/job/public~SimpleGiveall)
 =============
 
 A very simple Bukkit plugin that gives all online players one or more item(s).
@@ -27,7 +27,7 @@ For Building, use Apache Maven:
 ````
 mvn clean package
 ````
-If you want a pre-built copy, visit my [CI Server](http://server.nowak-at.net/jenkins/job/public~Simple%20Giveall/) or the GitHub releases.
+If you want a pre-built copy, visit my [CI Server](https://ci.nowak-at.net/job/public~SimpleGiveall/) or the GitHub releases.
 
 Help
 ------
@@ -35,7 +35,7 @@ If you wish to receive support for this plugin or just want to talk, you can try
 
 License
 --------
-    Simple Giveall for Bukkit  Copyright (C) 2013 - 2014 xxyy98@gmail.com | Philipp Nowak
+    Simple Giveall for Bukkit  Copyright (C) 2013 - 2015 Philipp Nowak
     This program comes with ABSOLUTELY NO WARRANTY; for details visit http://www.gnu.org/licenses/.
     This is free software, and you are welcome to redistribute it
     under certain conditions; visit http://www.gnu.org/licenses/ for details.
