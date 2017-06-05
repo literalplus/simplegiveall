@@ -1,4 +1,4 @@
-Simple Giveall [![Build Status](https://ci.nowak-at.net/buildStatus/icon?job=public~SimpleGiveall) ](https://ci.nowak-at.net/job/public~SimpleGiveall)
+Simple Giveall [![Build Status](https://ci.l1t.li/buildStatus/icon?job=public~SimpleGiveall) ](https://ci.l1t.li/job/public~SimpleGiveall)
 =============
 
 A very simple Bukkit plugin that gives all online players one or more item(s).
@@ -27,7 +27,7 @@ For Building, use Apache Maven:
 ````
 mvn clean package
 ````
-If you want a pre-built copy, visit my [CI Server](https://ci.nowak-at.net/job/public~SimpleGiveall/) or the GitHub releases.
+If you want a pre-built copy, visit my [CI Server](https://ci.l1t.li/job/public~SimpleGiveall/) or the GitHub releases.
 
 Help
 ------
